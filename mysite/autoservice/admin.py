@@ -16,7 +16,11 @@ class VehicleAdmin(admin.ModelAdmin):
     list_display = ['client_name', 'vehicle_model', 'license_plate', 'vin_code']
 
 
-admin.site.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'price']
+
+
+admin.site.register(Service, ServiceAdmin)
 admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleModel)
 admin.site.register(Order, OrderAdmin)
