@@ -12,8 +12,12 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderLineInLine]
 
 
+class VehicleAdmin(admin.ModelAdmin):
+    list_display = ['client_name', 'vehicle_model', 'license_plate', 'vin_code']
+
+
 admin.site.register(Service)
-admin.site.register(Vehicle)
+admin.site.register(Vehicle, VehicleAdmin)
 admin.site.register(VehicleModel)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderLine)
