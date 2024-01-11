@@ -44,6 +44,15 @@ class Order(models.Model):
     date = models.DateTimeField(verbose_name="Data")
     vehicle = models.ForeignKey(to="Vehicle", verbose_name="Automobilis", on_delete=models.CASCADE)
 
+    STATUS = (
+        ('p', "Patvirtinta"),
+        ('v', "Vykdoma"),
+        ('i', "Įvykdyta"),
+        ('a', "Atšaukta"),
+    )
+
+    status = models.CharField(verbose_name="Būsena", max_length=1, choices=STATUS, default="p")
+
     def total(self):
         total = 0
         for line in self.lines.all():
