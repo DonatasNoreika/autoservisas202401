@@ -5,6 +5,7 @@ from .models import Service, VehicleModel, Vehicle, Order, OrderLine
 class OrderLineInLine(admin.TabularInline):
     model = OrderLine
     extra = 0
+    fields = ['qty', 'service']
 
 
 class OrderAdmin(admin.ModelAdmin):
