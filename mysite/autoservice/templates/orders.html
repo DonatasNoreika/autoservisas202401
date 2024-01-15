@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block "title" %}Automobiliai{% endblock %}
+{% block "title" %}Taisymai{% endblock %}
 
 {% block "content" %}
 <h1>Autoserviso taisymai:</h1>
 {% for order in orders %}
-{{ order }}
+<a href="{{ order.pk }}">{{ order }}</a>
 <hr>
 {% endfor %}
 {% endblock %}

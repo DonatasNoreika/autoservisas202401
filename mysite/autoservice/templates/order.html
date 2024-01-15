@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block "title" %}Taisymas{% endblock %}
+
+{% block "content" %}
+<h1>Taisymas {{ order.date }}</h1>
+<p><strong>Automobilis: </strong>{{ order.vehicle }}</p>
+<p><strong>Būsena: </strong>{{ order.get_status_display }}</p>
+{% endblock %}
