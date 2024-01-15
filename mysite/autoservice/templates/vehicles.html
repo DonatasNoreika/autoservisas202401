@@ -3,6 +3,7 @@
 {% block "title" %}Automobiliai{% endblock %}
 
 {% block "content" %}
+<h1>Autoserviso automobiliai:</h1>
 {% for vehicle in vehicles %}
 <p><a href="{% url 'vehicle' vehicle.pk %}">{{ vehicle }}</a></p>
 <hr>
