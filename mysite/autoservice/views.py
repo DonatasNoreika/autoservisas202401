@@ -13,3 +13,12 @@ def index(request):
         "num_vehicles": num_vehicles,
     }
     return render(request, template_name="index.html", context=result)
+
+
+def vehicles(request):
+    vehicles = Vehicle.objects.all()
+    context = {
+        "vehicles": vehicles,
+    }
+    return render(request, template_name="vehicles.html", context=context)
+
