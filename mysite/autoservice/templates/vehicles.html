@@ -4,7 +4,7 @@
 
 {% block "content" %}
 {% for vehicle in vehicles %}
-<p>{{ vehicle }}</p>
+<p><a href="{% url 'vehicle' vehicle.pk %}">{{ vehicle }}</a></p>
 <hr>
 {% endfor %}
 {% endblock %}

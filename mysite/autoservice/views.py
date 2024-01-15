@@ -22,3 +22,10 @@ def vehicles(request):
     }
     return render(request, template_name="vehicles.html", context=context)
 
+
+def vehicle(request, vehicle_id):
+    vehicle = Vehicle.objects.get(pk=vehicle_id)
+    context = {
+        "vehicle": vehicle,
+    }
+    return render(request, template_name="vehicle.html", context=context)

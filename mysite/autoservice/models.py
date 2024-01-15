@@ -19,7 +19,7 @@ class VehicleModel(models.Model):
     model = models.CharField(verbose_name="Modelis", max_length=30)
 
     def __str__(self):
-        return f"{self.make} ({self.model})"
+        return f"{self.make} {self.model}"
 
     class Meta:
         verbose_name = 'Automobilio modelis'
