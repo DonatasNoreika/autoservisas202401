@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Service, Order, Vehicle
 from django.views import generic
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 def index(request):
@@ -18,8 +18,11 @@ def index(request):
 
 def vehicles(request):
     vehicles = Vehicle.objects.all()
+    paginator = Paginator(vehicles, per_page=3)
+    page_number = request.GET.get("page")
+    paged_vehicles = paginator.get_page(page_number)
     context = {
-        "vehicles": vehicles,
+        "vehicles": paged_vehicles,
     }
     return render(request, template_name="vehicles.html", context=context)
 
