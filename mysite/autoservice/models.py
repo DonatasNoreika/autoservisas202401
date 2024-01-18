@@ -2,8 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 import pytz
+from tinymce.models import HTMLField
 
 utc = pytz.UTC
+
 
 # Create your models here.
 class Service(models.Model):
@@ -36,6 +38,7 @@ class Vehicle(models.Model):
     client_name = models.CharField(verbose_name="Klientas", max_length=50)
     vehicle_model = models.ForeignKey(to="VehicleModel", verbose_name="Modelis", on_delete=models.SET_NULL, null=True)
     photo = models.ImageField('Nuotrauka', upload_to='vehicles', null=True, blank=True)
+    description = HTMLField(verbose_name="Aprašymas", null=True, blank=True)
 
     def __str__(self):
         return f"{self.vehicle_model} ({self.license_plate})"
@@ -61,7 +64,8 @@ class Order(models.Model):
     status = models.CharField(verbose_name="Būsena", max_length=1, choices=STATUS, default="p")
 
     def is_overdue(self):
-        return self.deadline and self.deadline.replace(tzinfo=utc) < datetime.today().replace(tzinfo=utc) and self.status != 'i'
+        return self.deadline and self.deadline.replace(tzinfo=utc) < datetime.today().replace(
+            tzinfo=utc) and self.status != 'i'
 
     def total(self):
         total = 0
