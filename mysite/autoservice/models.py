@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Service(models.Model):
@@ -43,6 +43,7 @@ class Vehicle(models.Model):
 
 class Order(models.Model):
     date = models.DateTimeField(verbose_name="Data")
+    client = models.ForeignKey(to=User, verbose_name="Klientas", on_delete=models.SET_NULL, null=True)
     vehicle = models.ForeignKey(to="Vehicle", verbose_name="Automobilis", on_delete=models.CASCADE)
 
     STATUS = (
