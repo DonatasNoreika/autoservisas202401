@@ -5,7 +5,7 @@
 {% block "content" %}
 <h1>Mano taisymai:</h1>
 {% for order in orders %}
-<a href="{% url 'order' order.pk %}">{{ order }}</a>
+<a class="{% if order.is_overdue %}text-danger{% endif %}" href="{% url 'order' order.pk %}">{{ order }}</a>
 <hr>
 {% endfor %}
 {% endblock %}

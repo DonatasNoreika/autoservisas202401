@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
+import pytz
+
+utc = pytz.UTC
 
 # Create your models here.
 class Service(models.Model):
@@ -45,6 +49,7 @@ class Order(models.Model):
     date = models.DateTimeField(verbose_name="Data")
     client = models.ForeignKey(to=User, verbose_name="Klientas", on_delete=models.SET_NULL, null=True)
     vehicle = models.ForeignKey(to="Vehicle", verbose_name="Automobilis", on_delete=models.CASCADE)
+    deadline = models.DateTimeField(verbose_name="Terminas", null=True, blank=True)
 
     STATUS = (
         ('p', "Patvirtinta"),
@@ -54,6 +59,9 @@ class Order(models.Model):
     )
 
     status = models.CharField(verbose_name="Būsena", max_length=1, choices=STATUS, default="p")
+
+    def is_overdue(self):
+        return self.deadline and self.deadline.replace(tzinfo=utc) < datetime.today().replace(tzinfo=utc) and self.status != 'i'
 
     def total(self):
         total = 0
