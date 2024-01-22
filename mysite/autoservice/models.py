@@ -95,3 +95,15 @@ class OrderLine(models.Model):
     class Meta:
         verbose_name = 'Užsakymo eilutė'
         verbose_name_plural = 'Užsakymo eilutės'
+
+
+class OrderComment(models.Model):
+    order = models.ForeignKey(to="Order", verbose_name="Užsakymas", on_delete=models.CASCADE)
+    author = models.ForeignKey(to=User, verbose_name="Autorius", on_delete=models.CASCADE)
+    date_created = models.DateTimeField(verbose_name="Data", auto_now_add=True)
+    content = models.TextField(verbose_name="Tekstas", max_length=1000)
+
+    class Meta:
+        verbose_name = 'Užsakymo komentaras'
+        verbose_name_plural = 'Užsakymų komentarai'
+        ordering = ['-date_created']

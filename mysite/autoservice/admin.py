@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Service, VehicleModel, Vehicle, Order, OrderLine
+from .models import Service, VehicleModel, Vehicle, Order, OrderLine, OrderComment
 
 
 class OrderLineInLine(admin.TabularInline):
@@ -8,10 +8,14 @@ class OrderLineInLine(admin.TabularInline):
     fields = ['qty', 'service']
 
 
+class OrderCommentInLine(admin.TabularInline):
+    model = OrderComment
+    extra = 0
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['date', 'vehicle', 'client', 'deadline', 'status']
     list_editable = ["client", 'deadline', 'status']
-    inlines = [OrderLineInLine]
+    inlines = [OrderLineInLine, OrderCommentInLine]
 
 
 class VehicleAdmin(admin.ModelAdmin):
@@ -22,6 +26,7 @@ class VehicleAdmin(admin.ModelAdmin):
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['name', 'price']
+
 
 
 admin.site.register(Service, ServiceAdmin)
