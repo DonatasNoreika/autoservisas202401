@@ -98,7 +98,7 @@ class OrderLine(models.Model):
 
 
 class OrderComment(models.Model):
-    order = models.ForeignKey(to="Order", verbose_name="Užsakymas", on_delete=models.CASCADE)
+    order = models.ForeignKey(to="Order", verbose_name="Užsakymas", on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(to=User, verbose_name="Autorius", on_delete=models.CASCADE)
     date_created = models.DateTimeField(verbose_name="Data", auto_now_add=True)
     content = models.TextField(verbose_name="Tekstas", max_length=1000)
