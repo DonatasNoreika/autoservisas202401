@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
+from django.contrib.auth import password_validation
 
 # Create your views here.
 def index(request):
@@ -102,6 +103,13 @@ def register(request):
                     messages.error(request, f'Vartotojas su el. paštu {email} jau užregistruotas!')
                     return redirect('register')
                 else:
+                    try:
+                        password_validation.validate_password(password)
+                    except password_validation.ValidationError as e:
+                        for error in e:
+                            messages.error(request, error)
+                        return redirect('register')
+
                     # jeigu viskas tvarkoje, sukuriame naują vartotoją
                     User.objects.create_user(username=username, email=email, password=password)
                     messages.info(request, f'Vartotojas {username} užregistruotas!')
