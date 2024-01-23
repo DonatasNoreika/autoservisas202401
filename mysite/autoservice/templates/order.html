@@ -7,7 +7,7 @@
 <p><strong>Automobilis: </strong>{{ order.vehicle }}</p>
 <p><strong>Būsena: </strong>{{ order.get_status_display }}</p>
 <p><strong>Terminas: </strong>{{ order.deadline }}</p>
-<p><strong>Klientas: </strong>{{ order.client }}</p>
+<p><strong>Klientas: </strong><img class="rounded-circle account-img" style="width: 30px" src="{{ order.client.profile.photo.url }}"> {{ order.client }}<br/></p>
 <table class="table table-hover">
     <thead>
     <tr>
