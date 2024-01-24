@@ -1,5 +1,5 @@
 from django import forms
-from .models import OrderComment, Profile
+from .models import OrderComment, Profile, Order
 from django.contrib.auth.models import User
 
 
@@ -21,3 +21,14 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['photo']
+
+
+class DateTimeInput(forms.DateTimeInput):
+    input_type = 'datetime-local'
+
+
+class OrderCreateUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['vehicle', 'deadline', 'status']
+        widgets = {"deadline": DateTimeInput()}
