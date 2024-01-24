@@ -178,7 +178,11 @@ class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVie
     model = Order
     template_name = "order_form.html"
     fields = ['vehicle', 'deadline', 'status']
-    success_url = "/autoservice/orders/"
+
+    # success_url = "/autoservice/orders/"
+
+    def get_success_url(self):
+        return reverse("order", kwargs={"pk": self.object.id})
 
     def form_valid(self, form):
         form.instance.client = self.request.user
