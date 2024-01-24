@@ -3,7 +3,7 @@ from .models import Service, Order, Vehicle
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.contrib.auth.forms import User
 from django.views.decorators.csrf import csrf_protect
@@ -174,3 +174,15 @@ class OrderCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
+class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Order
+    template_name = "order_form.html"
+    fields = ['vehicle', 'deadline', 'status']
+    success_url = "/autoservice/orders/"
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        return self.get_object().client == self.request.user
