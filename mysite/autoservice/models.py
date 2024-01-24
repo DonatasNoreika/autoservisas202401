@@ -50,7 +50,7 @@ class Vehicle(models.Model):
 
 
 class Order(models.Model):
-    date = models.DateTimeField(verbose_name="Data")
+    date = models.DateTimeField(verbose_name="Data", auto_now_add=True)
     client = models.ForeignKey(to=User, verbose_name="Klientas", on_delete=models.SET_NULL, null=True)
     vehicle = models.ForeignKey(to="Vehicle", verbose_name="Automobilis", on_delete=models.CASCADE)
     deadline = models.DateTimeField(verbose_name="Terminas", null=True, blank=True)
@@ -80,6 +80,7 @@ class Order(models.Model):
     class Meta:
         verbose_name = 'Užsakymas'
         verbose_name_plural = 'Užsakymai'
+        ordering = ['-date']
 
 
 class OrderLine(models.Model):

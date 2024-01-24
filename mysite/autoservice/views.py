@@ -51,38 +51,6 @@ def vehicle(request, vehicle_id):
     return render(request, template_name="vehicle.html", context=context)
 
 
-class OrderListView(generic.ListView):
-    model = Order
-    template_name = "orders.html"
-    context_object_name = "orders"
-    paginate_by = 3
-
-
-class OrderDetailView(FormMixin, generic.DetailView):
-    model = Order
-    template_name = 'order.html'
-    context_object_name = 'order'
-    form_class = OrderCommentForm
-
-    def get_success_url(self):
-        return reverse('order', kwargs={'pk': self.object.id})
-
-    # standartinis post metodo perrašymas, naudojant FormMixin, galite kopijuoti tiesiai į savo projektą.
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        form.instance.order = self.object
-        form.instance.author = self.request.user
-        form.save()
-        return super().form_valid(form)
-
-
 def search(request):
     query = request.GET.get('query')
     vehicles = Vehicle.objects.filter(Q(client_name__icontains=query) |
@@ -95,15 +63,6 @@ def search(request):
         "vehicles": vehicles,
     }
     return render(request, template_name='search.html', context=context)
-
-
-class MyOrderListView(LoginRequiredMixin, generic.ListView):
-    model = Order
-    template_name = "my_orders.html"
-    context_object_name = "orders"
-
-    def get_queryset(self):
-        return Order.objects.filter(client=self.request.user)
 
 
 @csrf_protect
@@ -160,4 +119,58 @@ def profile(request):
             'u_form': u_form,
             'p_form': p_form,
         }
+
+
+class MyOrderListView(LoginRequiredMixin, generic.ListView):
+    model = Order
+    template_name = "my_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        return Order.objects.filter(client=self.request.user)
         return render(request, template_name='profile.html', context=context)
+
+
+class OrderListView(generic.ListView):
+    model = Order
+    template_name = "orders.html"
+    context_object_name = "orders"
+    paginate_by = 3
+
+
+class OrderDetailView(FormMixin, generic.DetailView):
+    model = Order
+    template_name = 'order.html'
+    context_object_name = 'order'
+    form_class = OrderCommentForm
+
+    def get_success_url(self):
+        return reverse('order', kwargs={'pk': self.object.id})
+
+    # standartinis post metodo perrašymas, naudojant FormMixin, galite kopijuoti tiesiai į savo projektą.
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.order = self.object
+        form.instance.author = self.request.user
+        form.save()
+        return super().form_valid(form)
+
+
+class OrderCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Order
+    template_name = "order_form.html"
+    fields = ['vehicle', 'deadline', 'status']
+    success_url = "/autoservice/orders/"
+
+    def form_valid(self, form):
+        form.instance.client = self.request.user
+        return super().form_valid(form)
+
+
