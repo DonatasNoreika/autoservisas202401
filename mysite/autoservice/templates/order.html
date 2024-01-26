@@ -7,7 +7,8 @@
 <p><strong>Automobilis: </strong>{{ order.vehicle }}</p>
 <p><strong>Būsena: </strong>{{ order.get_status_display }}</p>
 <p><strong>Terminas: </strong>{{ order.deadline }}</p>
-<p><strong>Klientas: </strong><img class="rounded-circle account-img" style="width: 30px" src="{{ order.client.profile.photo.url }}"> {{ order.client }}<br/></p>
+<p><strong>Klientas: </strong><img class="rounded-circle account-img" style="width: 30px"
+                                   src="{{ order.client.profile.photo.url }}"> {{ order.client }}<br/></p>
 {% if order.client == user %}
 <div>
     <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'order_update' order.pk %}">Redaguoti</a>
@@ -24,7 +25,9 @@
         <th>Kaina</th>
         <th>Kiekis</th>
         <th>Suma</th>
+        {% if order.client == user %}
         <th></th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -34,9 +37,14 @@
         <td>{{ line.service.price }}</td>
         <td>{{ line.qty }}</td>
         <td>{{ line.line_sum }}</td>
-        <td>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'orderline_update' order.pk line.pk %}">Redaguoti</a>
+        {% if order.client == user %}
+        <td class="d-flex">
+            <a class="btn btn-secondary btn-sm mt-1 mb-1 mr-1" href="{% url 'orderline_update' order.pk line.pk %}">Redaguoti</a>
+            <form method="POST" action="{% url 'orderline_delete' order.pk line.pk %}">
+                {% csrf_token %}<input class="btn btn-danger btn-sm mt-1 mb-1" type="submit" value="Ištrinti">
+            </form>
         </td>
+        {% endif %}
     </tr>
     {% endfor %}
     <tr>
