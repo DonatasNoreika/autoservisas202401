@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from .models import Service, Order, Vehicle
+from .models import Service, Order, Vehicle, OrderLine
 from django.views import generic
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -180,6 +180,7 @@ class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVie
     template_name = "order_form.html"
     # fields = ['vehicle', 'deadline', 'status']
     form_class = OrderCreateUpdateForm
+
     # success_url = "/autoservice/orders/"
 
     def get_success_url(self):
@@ -201,3 +202,21 @@ class OrderDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteVie
 
     def test_func(self):
         return self.get_object().client == self.request.user
+
+
+class OrderLineCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = OrderLine
+    template_name = "orderline_form.html"
+    fields = ['service', 'qty']
+    # success_url = "/autoservice/orders/"
+
+    def get_success_url(self):
+        return reverse("order", kwargs={"pk": self.kwargs['order_pk']})
+
+    def form_valid(self, form):
+        form.instance.order = Order.objects.get(pk=self.kwargs['order_pk'])
+        return super().form_valid(form)
+
+    def test_func(self):
+        order = Order.objects.get(pk=self.kwargs['order_pk'])
+        return order.client == self.request.user
